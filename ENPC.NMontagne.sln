@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ENPC.NMontagne.Grasshopper", "ENPC.NMontagne.Grasshopper\ENPC.NMontagne.Grasshopper.csproj", "{69986983-A2F7-43FB-B7F1-2431358E43A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ENPC.NMontagne.Core", "ENPC.NMontagne.Core\ENPC.NMontagne.Core.csproj", "{BBC237DD-EB4E-4192-8950-A073BC444415}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{69986983-A2F7-43FB-B7F1-2431358E43A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69986983-A2F7-43FB-B7F1-2431358E43A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69986983-A2F7-43FB-B7F1-2431358E43A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69986983-A2F7-43FB-B7F1-2431358E43A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBC237DD-EB4E-4192-8950-A073BC444415}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBC237DD-EB4E-4192-8950-A073BC444415}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBC237DD-EB4E-4192-8950-A073BC444415}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBC237DD-EB4E-4192-8950-A073BC444415}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9E7729D0-46CF-4D39-8FEB-26BD24CA65B8}
+	EndGlobalSection
+EndGlobal

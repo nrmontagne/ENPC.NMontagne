@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net461</TargetFramework>
+    <Version>1.0-beta</Version>
+    <Authors>ENPC</Authors>
+    <Company>ENPC</Company>
+    <Product>ENPC.NMontagne.Grasshopper</Product>
+    <Description>Library for ENPC Grasshopper components.</Description>
+    <IncludeSymbols>true</IncludeSymbols>
+    <PackageTags>ENPC.NMontagne.Grasshopper</PackageTags>
+    <Configurations>Debug;Release</Configurations>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>ENPC.NMontagne.Grasshopper</AssemblyName>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ENPC.McNeel.Grasshopper" Version="1.0.0-beta" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ENPC.NMontagne.Core\ENPC.NMontagne.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="VossNets\" />
+  </ItemGroup>
+
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <ItemGroup>
+      <GhaTargetPath Include="$(ENPCDebugRepo)$(ProjectName)\" />
+    </ItemGroup>
+
+    <Exec Command="Copy &quot;$(TargetPath)&quot; &quot;$(TargetDir)$(ProjectName).gha&quot;&#xD;&#xA; Erase &quot;$(TargetPath)&quot;&#xD;&#xA;" />
+
+    <MakeDir Directories="@(GhaTargetPath)" />
+    <Exec Command="Copy &quot;$(TargetDir)*&quot; &quot;@(GhaTargetPath)*&quot;" />
+    <Exec Command="Erase &quot;@(GhaTargetPath)RhinoCommon.dll&quot;&#xD;&#xA;  Erase &quot;@(GhaTargetPath)Eto.dll&quot;&#xD;&#xA; Erase &quot;@(GhaTargetPath)Rhino.UI.dll&quot;&#xD;&#xA;" />
+    <Exec Command="Erase &quot;@(GhaTargetPath)Grasshopper.dll&quot;&#xD;&#xA;  Erase &quot;@(GhaTargetPath)GH_IO.dll&quot;&#xD;&#xA;" />
+  </Target>
+
+</Project>
