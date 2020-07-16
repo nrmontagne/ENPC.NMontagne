@@ -12,6 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Accord.Math" Version="3.8.2-alpha" />
     <PackageReference Include="ENPC" Version="1.0.0-beta" />
   </ItemGroup>
 

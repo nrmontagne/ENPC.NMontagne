@@ -1,32 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using ENPC.Geometry.Euclidean;
+using Euc = ENPC.Geometry.Euclidean;
 using ENPC.DataStructure.PolyhedralMesh.HalfedgeMesh;
 
 using GH_K = Grasshopper.Kernel;
 
-using ENPC.McNeel.Grasshopper.Parameters.Euclidean;
+using Param_Euc = ENPC.McNeel.Grasshopper.Parameters.Euclidean;
 
-using ENPC.NMontagne.Core.CoreFunctions.ChebyshevNets;
+using ENPC.NMontagne.Core.CoreFunctions.VossNets;
 
 
-namespace ENPC.NMontagne.Grasshopper.ChebyshevNet.OnUnitSphere
+namespace ENPC.NMontagne.Grasshopper.VossNets
 {
     /// <summary>
-    /// A grasshopper component computing a Chebyshev net on the unity sphere from two primal conditions.
+    /// A grasshopper component evaluating whether the net has planar faces.
     /// </summary>
-    public class Comp_ChebyshevFromTwoPrimal : GH_K.GH_Component
+    public class Comp_HasPlanarFaces : GH_K.GH_Component
     {
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Comp_ChebyshevFromThreePrimal"/> class.
+        /// Initializes a new instance of the <see cref="Comp_HasPlanarFaces"/> class.
         /// </summary>
-        public Comp_ChebyshevFromTwoPrimal()
-          : base("Chebyshev 2 Primal", "Cheb. 2P",
-              "Computes a Chebyshev net on the unit sphere from two primal conditions.",
-              LibrarySettings.Otter.Name, LibrarySettings.Otter.ChebyshevNets.Name)
+        public Comp_HasPlanarFaces()
+          : base("Is Planar", "Is Plan.",
+              "Evaluating whether the net has planar faces.",
+              LibrarySettings.Otter.Name, LibrarySettings.Otter.VossNets.Name)
         {
         }
 
@@ -37,33 +37,32 @@ namespace ENPC.NMontagne.Grasshopper.ChebyshevNet.OnUnitSphere
         /// <inheritdoc cref="GH_K.GH_Component.RegisterInputParams(GH_InputParamManager)"/>
         protected override void RegisterInputParams(GH_K.GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new Param_Point(), "U Normals", "U", "The list of points corresponding to the primal condition in the first direction U.", GH_K.GH_ParamAccess.list);
-            pManager.AddParameter(new Param_Point(), "V Normals", "V", "The list of points corresponding to the primal condition in the first direction V.", GH_K.GH_ParamAccess.list);
+            pManager.AddParameter(new Param_Euc.Param_HeMesh(), "Net", "M", "The net to evaluate.", GH_K.GH_ParamAccess.item);
         }
 
         /// <inheritdoc cref="GH_K.GH_Component.RegisterOutputParams(GH_OutputParamManager)"/>
         protected override void RegisterOutputParams(GH_K.GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddParameter(new Param_HeMesh(), "HeMesh", "M", "The mesh representing the Chebyshev net obtained from the input primal conditions.", GH_K.GH_ParamAccess.item);
+            pManager.AddParameter(new Param_Euc.Param_Point(), "Valid Faces", "T", "The barycenter of the faces for which the planarity criteria is valid.", GH_K.GH_ParamAccess.list);
+            pManager.AddParameter(new Param_Euc.Param_Point(), "Invalid Faces", "F", "The barycenter of the faces for which the planarity criteria is not valid.", GH_K.GH_ParamAccess.list);
         }
 
         /// <inheritdoc cref="GH_K.GH_Component.SolveInstance(GH_K.IGH_DataAccess)"/>
         protected override void SolveInstance(GH_K.IGH_DataAccess DA)
         {
             // Declaration, initialization, and instanciation of input variables
-            List<Point> u = new List<Point>();
-            List<Point> v = new List<Point>();
+            HeMesh<Euc.Point> net = new HeMesh<Euc.Point>();
 
             // Get Input
 
-            if (!DA.GetDataList(0, u)) { return; }
-            if (!DA.GetDataList(1, v)) { return; }
+            if (!DA.GetData(0, ref net)) { return; }
 
             // Core of the component
-            ChebyshevOnUnitSphere.Core_FromTwoPrimal(u, v, out HeMesh<Point> mesh);
+            IsVoss.Core_HasPlanarFaces(net, out List<Euc.Point> areTrue, out List<Euc.Point> areFalse);
 
             // Set Output
-            DA.SetData(0, mesh);
+            DA.SetDataList(0, areTrue);
+            DA.SetDataList(1, areFalse);
         }
 
         #endregion
@@ -73,7 +72,7 @@ namespace ENPC.NMontagne.Grasshopper.ChebyshevNet.OnUnitSphere
         /// <inheritdoc cref="GH_K.GH_DocumentObject.ComponentGuid"/>
         public override Guid ComponentGuid
         {
-            get { return new Guid("{E2016358-6EA4-423B-ABCC-68910EBAA3F7}"); }
+            get { return new Guid("{21C62099-C8EB-4E32-A9F1-72664BFD6AC8}"); }
         }
 
         /// <inheritdoc cref="GH_K.GH_DocumentObject.Icon"/>

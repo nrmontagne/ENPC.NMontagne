@@ -6,27 +6,27 @@ using ENPC.DataStructure.PolyhedralMesh.HalfedgeMesh;
 
 using GH_K = Grasshopper.Kernel;
 
-using ENPC.McNeel.Grasshopper.Parameters.Euclidean;
+using Param_Euc = ENPC.McNeel.Grasshopper.Parameters.Euclidean;
 
-using ENPC.NMontagne.Core.CoreFunctions.ChebyshevNets;
+using ENPC.NMontagne.Core.CoreFunctions.VossNets;
 
 
-namespace ENPC.NMontagne.Grasshopper.ChebyshevNet.OnUnitSphere
+namespace ENPC.NMontagne.Grasshopper.VossNets
 {
     /// <summary>
-    /// A grasshopper component computing a Chebyshev net on the unity sphere from two primal conditions.
+    /// A grasshopper component computing the isometric deformation of a Voss net.
     /// </summary>
-    public class Comp_ChebyshevFromTwoPrimal : GH_K.GH_Component
+    public class Comp_VossIsometry : GH_K.GH_Component
     {
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Comp_ChebyshevFromThreePrimal"/> class.
+        /// Initializes a new instance of the <see cref="Comp_VossIsometry"/> class.
         /// </summary>
-        public Comp_ChebyshevFromTwoPrimal()
-          : base("Chebyshev 2 Primal", "Cheb. 2P",
-              "Computes a Chebyshev net on the unit sphere from two primal conditions.",
-              LibrarySettings.Otter.Name, LibrarySettings.Otter.ChebyshevNets.Name)
+        public Comp_VossIsometry()
+          : base("Voss Isometry", "Voss Iso.",
+              "Computes the isometric deformation of a Voss net.",
+              LibrarySettings.Otter.Name, LibrarySettings.Otter.VossNets.Name)
         {
         }
 
@@ -37,33 +37,33 @@ namespace ENPC.NMontagne.Grasshopper.ChebyshevNet.OnUnitSphere
         /// <inheritdoc cref="GH_K.GH_Component.RegisterInputParams(GH_InputParamManager)"/>
         protected override void RegisterInputParams(GH_K.GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new Param_Point(), "U Normals", "U", "The list of points corresponding to the primal condition in the first direction U.", GH_K.GH_ParamAccess.list);
-            pManager.AddParameter(new Param_Point(), "V Normals", "V", "The list of points corresponding to the primal condition in the first direction V.", GH_K.GH_ParamAccess.list);
+            pManager.AddParameter(new Param_Euc.Param_HeMesh(), "Voss Net", "M", "The Voss net to deform.", GH_K.GH_ParamAccess.item);
+            pManager.AddNumberParameter("Factor", "F", "The paramater for the isometry of Voss nets.", GH_K.GH_ParamAccess.item);
         }
 
         /// <inheritdoc cref="GH_K.GH_Component.RegisterOutputParams(GH_OutputParamManager)"/>
         protected override void RegisterOutputParams(GH_K.GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddParameter(new Param_HeMesh(), "HeMesh", "M", "The mesh representing the Chebyshev net obtained from the input primal conditions.", GH_K.GH_ParamAccess.item);
+            pManager.AddParameter(new Param_Euc.Param_HeMesh(), "Voss net", "V", "The deformet Voss net", GH_K.GH_ParamAccess.item);
         }
 
         /// <inheritdoc cref="GH_K.GH_Component.SolveInstance(GH_K.IGH_DataAccess)"/>
         protected override void SolveInstance(GH_K.IGH_DataAccess DA)
         {
             // Declaration, initialization, and instanciation of input variables
-            List<Point> u = new List<Point>();
-            List<Point> v = new List<Point>();
+            HeMesh<Point> gaussMap = new HeMesh<Point>();
+            double factor = 0.0;
 
             // Get Input
 
-            if (!DA.GetDataList(0, u)) { return; }
-            if (!DA.GetDataList(1, v)) { return; }
+            if (!DA.GetData(0, ref gaussMap)) { return; }
+            if (!DA.GetData(1, ref factor)) { return; }
 
             // Core of the component
-            ChebyshevOnUnitSphere.Core_FromTwoPrimal(u, v, out HeMesh<Point> mesh);
+            VossDeformations.Core_Isometric(gaussMap, factor, out HeMesh<Point> vossNet);
 
             // Set Output
-            DA.SetData(0, mesh);
+            DA.SetData(0, vossNet);
         }
 
         #endregion
@@ -73,7 +73,7 @@ namespace ENPC.NMontagne.Grasshopper.ChebyshevNet.OnUnitSphere
         /// <inheritdoc cref="GH_K.GH_DocumentObject.ComponentGuid"/>
         public override Guid ComponentGuid
         {
-            get { return new Guid("{E2016358-6EA4-423B-ABCC-68910EBAA3F7}"); }
+            get { return new Guid("{921A3563-7D99-4C3C-AEB5-7F1DF3F7A8E2}"); }
         }
 
         /// <inheritdoc cref="GH_K.GH_DocumentObject.Icon"/>

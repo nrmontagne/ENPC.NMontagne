@@ -39,6 +39,21 @@ namespace ENPC.NMontagne.Grasshopper
             /// <summary>
             /// ENPC grasshopper subcategory for Voss nets.
             /// </summary>
+            internal static class Meshes
+            {
+                /// <summary>
+                /// Name of the grasshopper subcategory.
+                /// </summary>
+                public const string Name = "Meshes";
+                /// <summary>
+                /// Nickname of the grasshopper subcategory.
+                /// </summary>
+                public const string Nickname = "Meshes";
+            }
+
+            /// <summary>
+            /// ENPC grasshopper subcategory for Voss nets.
+            /// </summary>
             internal static class VossNets
             {
                 /// <summary>

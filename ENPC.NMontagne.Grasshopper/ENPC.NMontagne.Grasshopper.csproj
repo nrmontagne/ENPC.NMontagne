@@ -23,10 +23,6 @@
     <ProjectReference Include="..\ENPC.NMontagne.Core\ENPC.NMontagne.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="VossNets\" />
-  </ItemGroup>
-
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <ItemGroup>
